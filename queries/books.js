@@ -25,20 +25,18 @@ async function getBook(id) {
 const createBook = async (data) => {
   try {
     const newBook = await db.one(
-      "INSERT INTO books(title, publisher, published_year, pages, genre, country, art, cover_artist, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
+      "INSERT INTO books(title, author, publisher, published_year, pages, genre, art, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
       [
         data.title,
+        data.author,
         data.publisher,
         data.published_year,
         data.pages,
         data.genre,
-        data.country,
         data.art,
-        data.cover_artist,
         data.description
       ]
     );
-
     return { status: "successful!", data: newBook };
   } catch (error) {
     return error;
@@ -70,15 +68,14 @@ const updateBook = async (id, data) => {
     };
 
     const updatedBook = await db.one(
-      "UPDATE books SET title = $1, publisher = $2, published_year = $3, pages = $4, genre = $5, country = $6, cover_artist = $7, art = $8, description = $9 WHERE id = $10 RETURNING *",
+      "UPDATE books SET title = $1, author = $2, publisher = $3, published_year = $4, pages = $5, genre = $6, art = $7, description = $8 WHERE id = $9 RETURNING *",
       [
         newBook.title,
+        newBook.author,
         newBook.publisher,
         newBook.published_year,
         newBook.pages,
         newBook.genre,
-        newBook.country,
-        newBook.cover_artist,
         newBook.art,
         newBook.description,
         id,

@@ -8,6 +8,14 @@ const {
   updateBook,
 } = require("../queries/books.js");
 
+const { 
+    checkArt,
+    checkAuthor,
+    checkPublished_Year,
+    checkTitle,
+    checkPages,
+} = require("../validations/checkBooks")
+
 router.get("/", async (req, res) => {
     const allBooks = await getAllBooks();
   
@@ -38,7 +46,7 @@ router.get("/", async (req, res) => {
     }
   });
 
-  router.post("/", async (req, res) => {
+  router.post("/", checkPages , checkArt, checkAuthor, checkPublished_Year, checkTitle, async (req, res) => {
     try {
       const artUrl = req.body.art
         ? req.body.art
@@ -56,7 +64,7 @@ router.get("/", async (req, res) => {
     }
   });
 
-  router.put("/:id", async (req, res) => {
+  router.put("/:id", checkPages, checkArt, checkAuthor, checkPublished_Year, checkTitle, async (req, res) => {
     try {
       const { id } = req.params;
       const artUrl = req.body.art ? req.body.art : "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
